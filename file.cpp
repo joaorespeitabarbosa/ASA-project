@@ -16,16 +16,33 @@ using namespace std;
 int fill_matrix(vector<int> &X, vector<int> &Y) {
     int v1, v2;
     int matrix[Y[0]][2];
+    vector<int> vect1 = {X[0]}, vect2 = {X[1]};
+
     for (int i = 1; i <= Y[1]; ++i) {
         scanf("%d%d", &v1, &v2);
-        if (matrix[v2-1][0] == 0)
+        if (matrix[v2-1][0] == 0){
             matrix[v2-1][0] = v1;
-        if (matrix[v2-1][1] == 0)
+            continue;
+        }
+        if (matrix[v2-1][1] == 0){
             matrix[v2-1][1] = v1;
+            continue;
+        }
         else
             return 0;
     }
-    
+    while (true){
+        if (matrix[vect1.back() - 1][0] == 0 && matrix[vect1.back() - 1][1] == 0){
+            break;
+        }
+        if (matrix[vect1.back() - 1][0] == 0)
+            continue;
+        vect1.push_back(matrix[vect1.back() - 1][0]);
+        if (matrix[vect1.back() - 1][1] == 0)
+            continue;
+        
+    }
+
     return 1;
 }
 
