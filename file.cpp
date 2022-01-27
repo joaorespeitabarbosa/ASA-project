@@ -13,38 +13,11 @@
 
 using namespace std;
 
-int fill_matrix(vector<int> &X, vector<int> &Y) {
-    int v1, v2;
-    int matrix[Y[0]][2];
-    vector<int> vect1 = {X[0]}, vect2 = {X[1]};
+vector<int> find_common(vector<int> vect1, vector<int> vect2);
 
-    for (int i = 1; i <= Y[1]; ++i) {
-        scanf("%d%d", &v1, &v2);
-        if (matrix[v2-1][0] == 0){
-            matrix[v2-1][0] = v1;
-            continue;
-        }
-        if (matrix[v2-1][1] == 0){
-            matrix[v2-1][1] = v1;
-            continue;
-        }
-        else
-            return 0;
-    }
-    while (true){
-        if (matrix[vect1.back() - 1][0] == 0 && matrix[vect1.back() - 1][1] == 0){
-            break;
-        }
-        if (matrix[vect1.back() - 1][0] == 0)
-            continue;
-        vect1.push_back(matrix[vect1.back() - 1][0]);
-        if (matrix[vect1.back() - 1][1] == 0)
-            continue;
-        
-    }
+vector<int> fill_vector(int (*matrix)[2], vector<int> vect);
 
-    return 1;
-}
+int fill_matrix(vector<int> &X, vector<int> &Y);
 
 int main() {
     string apexs, sizes, split;
@@ -68,4 +41,61 @@ int main() {
         printf("0\n");
     
     return 0;
+}
+
+int fill_matrix(vector<int> &X, vector<int> &Y) {
+    int v1, v2;
+    int matrix[Y[0]][2];
+    vector<int> vect1 = {X[0]}, vect2 = {X[1]}, vect3;
+
+    for (int i = 1; i <= Y[1]; ++i) {
+        if (scanf("%d%d", &v1, &v2) != 2)
+            return 0;
+        if (matrix[v2-1][0] == 0){
+            matrix[v2-1][0] = v1;
+            continue;
+        }
+        if (matrix[v2-1][1] == 0){
+            matrix[v2-1][1] = v1;
+            continue;
+        }
+        else
+            return 0;
+    }
+    vect1 = fill_vector(matrix, vect1);
+    vect2 = fill_vector(matrix, vect2);
+    vect3 = find_common(vect1, vect2);
+    return 1;
+}
+
+vector<int> fill_vector(int (*matrix)[2], vector<int> vect) {
+    int aux = 0;
+    while (true){
+        if (matrix[vect.back() - 1][0] == 0){
+            break;
+        }
+        if (matrix[vect.back() - 1][1] == 0) {
+            if (find(vect.begin(), vect.end(), matrix[vect.back() - 1][0]) == vect.end()) {
+                vect.push_back(matrix[vect.back() - 1][0]);
+                continue;
+            }
+            break;
+        }
+        if (find(vect.begin(), vect.end(), matrix[aux - 1][0]) != vect.end() && 
+        find(vect.begin(), vect.end(), matrix[aux - 1][1]) != vect.end())
+            break;
+        aux = vect.back();
+        if (find(vect.begin(), vect.end(), matrix[vect.back() - 1][0]) == vect.end()){
+            vect.push_back(matrix[vect.back() - 1][0]);
+            vect = fill_vector(matrix, vect);
+        }
+        if (find(vect.begin(), vect.end(), matrix[aux - 1][1]) == vect.end()){
+            vect.push_back(matrix[aux - 1][1]);
+        }      
+    }
+    return vect;
+}
+
+vector<int> find_common(vector<int> vect1, vector<int> vect2) {
+    
 }
